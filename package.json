@@ -1,0 +1,31 @@
+{
+  "name": "logger-manager",
+  "role": "logger",
+  "version": "0.1.0",
+  "description": "Manages different winston logger",
+  "authors": [
+    "Michael Ferris <mike.ferris@hotmail.com>",
+    "Mathieu M-Gosselin <mathieumg@novivia.com>",
+    "Maxime Poulin <mpoulin@novivia.com>"
+  ],
+  "scripts": {
+    "build": "babel -m commonStrict -d build src",
+    "test": "babel-node tests/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Cellule/logger-manager"
+  },
+  "main": "build/index.js",
+  "dependencies": {
+    "lodash": "^2.4.1",
+    "mkdirp": "^0.5.0",
+    "pkginfo-json5": "mathieumg/pkginfo-json5#v0.4.0",
+    "printf": "^0.2.1",
+    "winston": "mathieumg/winston"
+  },
+  "devDependencies": {
+    "babel": "^4.7.1",
+    "babel-eslint": "^1.0.13"
+  }
+}
