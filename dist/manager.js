@@ -1,5 +1,9 @@
 "use strict";
 
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
 // Provide the appropriate logger each time we're called.
 exports.getLogger = getLogger;
 exports.setLevelAll = setLevelAll;
@@ -13,7 +17,9 @@ var winston = require("winston")["default"];
 
 var getNow = require("./utils").getNow;
 
-var defaultLevel = "verbose";
+var config = require("./config");
+
+var defaultLevel = config.isDev ? "verbose" : "info";
 var loggers = {};
 var unknownCount = 0;
 
@@ -34,6 +40,8 @@ winston.remove(winston.transports.Console);
 
 var LoggerProxy = (function () {
   function LoggerProxy(name) {
+    _classCallCheck(this, LoggerProxy);
+
     this.name = name;
     this.consoleTransport = new winston.transports.Console({
       level: defaultLevel,
@@ -49,23 +57,24 @@ var LoggerProxy = (function () {
       transports: [this.consoleTransport]
     });
   }
-  // Expose a method to allow the user to change the minimal logging level needed
-  // to be displayed in the console.
-  LoggerProxy.prototype.setLevel = function (level) {
-    this.consoleTransport.level = level || defaultLevel;
-  };
-  LoggerProxy.prototype.log = function () {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-      args[_i - 0] = arguments[_i];
+
+  _createClass(LoggerProxy, {
+    setLevel: {
+
+      // Expose a method to allow the user to change the minimal logging level
+      // needed to be displayed in the console.
+
+      value: function setLevel(level) {
+        this.consoleTransport.level = level || defaultLevel;
+      }
     }
-    this.logger.log.apply(this.logger, args);
-  };
+  });
+
   return LoggerProxy;
 })();
 
 // Redirect the "log" call and the basic logging levels.
-_(winston.config.npm.levels).keys().concat(["logs"]).forEach(_.partial(proxyMethod, LoggerProxy, "logger"));
+_(winston.config.npm.levels).keys().concat(["log"]).forEach(_.partial(proxyMethod, LoggerProxy, "logger"));
 function getLogger(module) {
   // Label value for the module.
   var name;
