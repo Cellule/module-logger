@@ -14,22 +14,22 @@ function peekLastLog() {
   return lastConsoleCall;
 }
 
+
+// Redirect console calls
 var oldWrite = [
   process.stderr.write,
   process.stdout.write,
   console.log
 ];
-function redirect() {
+function redirectConsole() {
   function logTest(args) {
     lastConsoleCall = args;
   }
-  // Redirect console calls
   process.stderr.write = logTest;
   process.stdout.write = logTest;
   console.log = logTest;
 }
-
-function resetRedirects() {
+function resetConsole() {
   process.stderr.write = oldWrite[0];
   process.stdout.write = oldWrite[1];
   console.log = oldWrite[2];
@@ -56,13 +56,16 @@ describe("Manager", function() {
   });
 });
 
+var timestampRe = /\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d/;
+var timestampNoSecRe = /\d\d\d\d-\d\d-\d\d \d\d:\d\d/;
+
 describe("logger", function() {
   beforeEach(function() {
-    redirect();
+    redirectConsole();
   });
 
   afterEach(function() {
-    resetRedirects();
+    resetConsole();
   });
 
   it("should log all", function() {
@@ -108,6 +111,33 @@ describe("logger", function() {
       logger.log(level, "test");
       expect(getLastLog()).toBeUndefined();
     });
+  });
+
+  it("should show a timestamp", function() {
+    var manager = getManager();
+    var logger = manager("logger1");
+    logger.error("test");
+    expect(getLastLog()).toMatch(timestampRe);
+  });
+
+  it("should show have different dev timestamps", function() {
+    var manager = getManager();
+    var logger = manager("logger1");
+    manager.setDev(true);
+    function getTimestamp() {
+      logger.error("test");
+      return timestampNoSecRe.exec(getLastLog())[0];
+    }
+    var ts1 = getTimestamp();
+    var ts2 = getTimestamp();
+    manager.setDev(false);
+    logger.error("test");
+    var ts3 = getTimestamp();
+    var ts4 = getTimestamp();
+
+    expect(ts1).toEqual(ts2);
+    expect(ts3).toEqual(ts4);
+    expect(ts1).not.toEqual(ts3);
   });
 
 });

@@ -23,7 +23,7 @@
     "mkdirp": "^0.5.0",
     "pkginfo-json5": "mathieumg/pkginfo-json5#v0.4.0",
     "printf": "^0.2.1",
-    "winston": "mathieumg/winston"
+    "winston": "^0.7.3"
   },
   "devDependencies": {
     "babel": "^4.7.1",
