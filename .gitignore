@@ -1,4 +1,6 @@
 /*.sublime-workspace
+__build_tests__
+
 # Logs
 logs
 *.log
