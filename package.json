@@ -1,5 +1,5 @@
 {
-  "name": "logger-manager",
+  "name": "module-logger",
   "role": "logger",
   "version": "0.1.0",
   "description": "Manages different winston logger",
