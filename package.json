@@ -11,7 +11,9 @@
   "scripts": {
     "build": "gulp build",
     "test": "gulp test",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "prepublish": "gulp prepublish",
+    "postpublish": "gulp postpublish"
   },
   "repository": {
     "type": "git",
