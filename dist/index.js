@@ -1,6 +1,6 @@
 "use strict";
 
-var _ = require("lodash")["default"];
+var _ = require("lodash");
 
 var manager = require("./manager");
 
@@ -14,4 +14,4 @@ _(manager).keys().filter(function (member) {
 });
 
 manager.getLogger.setDev = config.setDev;
-exports["default"] = manager.getLogger;
+module.exports = manager.getLogger;

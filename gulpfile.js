@@ -6,7 +6,7 @@ gulp.task("clean", function(cb) {
   del(["dist"], cb);
 });
 
-gulp.task("build", ["clean"], function () {
+gulp.task("build", function () {
   return gulp.src("src/**/*.js")
     .pipe(babel({
       modules: "commonStrict"

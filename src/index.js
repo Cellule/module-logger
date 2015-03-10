@@ -1,4 +1,4 @@
-import _ from "lodash"
+import * as _ from "lodash"
 import * as manager from "./manager"
 import * as config from "./config"
 
@@ -9,4 +9,4 @@ _(manager)
   .forEach(member => { manager.getLogger[member] = manager[member]; });
 
 manager.getLogger.setDev = config.setDev;
-export default manager.getLogger;
+module.exports = manager.getLogger;

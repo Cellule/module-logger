@@ -1,6 +1,6 @@
-import _ from "lodash"
-import pkginfo from "pkginfo-json5"
-import winston from "winston"
+import * as _ from "lodash"
+import * as pkginfo from "pkginfo-json5"
+import * as winston from "winston"
 import {getNow} from "./utils"
 import * as config from "./config"
 

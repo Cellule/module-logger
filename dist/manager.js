@@ -9,11 +9,11 @@ exports.getLogger = getLogger;
 exports.setLevelAll = setLevelAll;
 exports.getAvailableLevels = getAvailableLevels;
 
-var _ = require("lodash")["default"];
+var _ = require("lodash");
 
-var pkginfo = require("pkginfo-json5")["default"];
+var pkginfo = require("pkginfo-json5");
 
-var winston = require("winston")["default"];
+var winston = require("winston");
 
 var getNow = require("./utils").getNow;
 
