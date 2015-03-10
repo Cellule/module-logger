@@ -1,12 +1,15 @@
 "use strict";
 
 exports.getNow = getNow;
-var printf = require("printf");
+var printf = require("util").format;
 
 var config = require("./config");
 
 function localISOString(d) {
-  return printf("%d-%02d-%02d %02d:%02d:%02d", d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds());
+  function pad(n) {
+    return n < 10 ? "0" + n : String(n);
+  }
+  return printf("%d-%s-%s %s:%s:%s", d.getFullYear(), pad(d.getMonth() + 1), pad(d.getDate()), pad(d.getHours()), pad(d.getMinutes()), pad(d.getSeconds()));
 }
 
 function getNow() {

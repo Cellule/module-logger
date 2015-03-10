@@ -1,4 +1,3 @@
-var _ = require("lodash");
 var pkginfo = require("pkginfo-json5");
 var winston = require("winston");
 
@@ -48,13 +47,17 @@ class LoggerProxy {
   setLevel(level) {
     this.consoleTransport.level = level || defaultLevel;
   }
+
+  log(...args) {
+    this.logger.log.apply(this.logger, args);
+  }
 }
 
-// Redirect the "log" call and the basic logging levels.
-_(winston.config.npm.levels)
-  .keys()
-  .concat(["log"])
-  .forEach(_.partial(proxyMethod, LoggerProxy, "logger"));
+// Redirect the basic logging levels.
+Object.keys(winston.config.npm.levels)
+  .forEach(level => {
+    proxyMethod(LoggerProxy, "logger", level);
+  });
 
 // Default values
 loggers[defaultLoggerName] = new LoggerProxy();
@@ -100,11 +103,13 @@ export function getLogger(module) {
 
 export function setLevelAll(level) {
   defaultLevel = level;
-  _.each(loggers, function (logger) {
-    logger.setLevel(level);
-  });
+  for(var loggerName in loggers) {
+    if(loggers.hasOwnProperty(loggerName)) {
+      loggers[loggerName].setLevel(level);
+    }
+  }
 }
 
 export function getAvailableLevels() {
-  return _.keys(winston.config.npm.levels);
+  return Object.keys(winston.config.npm.levels);
 }

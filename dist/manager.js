@@ -8,7 +8,6 @@ var _classCallCheck = function (instance, Constructor) { if (!(instance instance
 exports.getLogger = getLogger;
 exports.setLevelAll = setLevelAll;
 exports.getAvailableLevels = getAvailableLevels;
-var _ = require("lodash");
 var pkginfo = require("pkginfo-json5");
 var winston = require("winston");
 
@@ -63,14 +62,25 @@ var LoggerProxy = (function () {
       value: function setLevel(level) {
         this.consoleTransport.level = level || defaultLevel;
       }
+    },
+    log: {
+      value: function log() {
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+          args[_key] = arguments[_key];
+        }
+
+        this.logger.log.apply(this.logger, args);
+      }
     }
   });
 
   return LoggerProxy;
 })();
 
-// Redirect the "log" call and the basic logging levels.
-_(winston.config.npm.levels).keys().concat(["log"]).forEach(_.partial(proxyMethod, LoggerProxy, "logger"));
+// Redirect the basic logging levels.
+Object.keys(winston.config.npm.levels).forEach(function (level) {
+  proxyMethod(LoggerProxy, "logger", level);
+});
 
 // Default values
 loggers[defaultLoggerName] = new LoggerProxy();
@@ -110,11 +120,13 @@ function getLogger(module) {
 
 function setLevelAll(level) {
   defaultLevel = level;
-  _.each(loggers, function (logger) {
-    logger.setLevel(level);
-  });
+  for (var loggerName in loggers) {
+    if (loggers.hasOwnProperty(loggerName)) {
+      loggers[loggerName].setLevel(level);
+    }
+  }
 }
 
 function getAvailableLevels() {
-  return _.keys(winston.config.npm.levels);
+  return Object.keys(winston.config.npm.levels);
 }
