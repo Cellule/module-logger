@@ -19,7 +19,6 @@ var config = require("./config");
 var defaultLevel = config.isDev ? "verbose" : "info";
 var loggers = {};
 var defaultLoggerName = "__default__";
-var unknownCount = 0;
 
 // We are forcing winston to handle unhandled exceptions, therefore it is
 // our responsibility to bust this limit, not winston's.

@@ -1,4 +1,10 @@
-var manager = require("../src/index");
+var manager = require("../dist/index");
+
+describe("A suite", function() {
+  it("contains spec with an expectation", function() {
+    expect(true).toBe(true);
+  });
+});
 
 manager.setDev(true);
 

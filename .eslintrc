@@ -3,6 +3,7 @@
   "parser": "babel-eslint",
   "env": {
     "node": true,
+    "jasmine": true,
   },
   "ecmaFeatures": {
   },

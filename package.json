@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "build": "gulp build",
-    "test": "babel-node tests/test.js",
+    "test": "npm run build&&jasmine",
     "lint": "eslint src"
   },
   "repository": {
@@ -31,6 +31,7 @@
     "del": "^1.1.1",
     "eslint": "^0.16.1",
     "gulp": "^3.8.11",
-    "gulp-babel": "^4.0.0"
+    "gulp-babel": "^4.0.0",
+    "jasmine": "^2.2.1"
   }
 }
