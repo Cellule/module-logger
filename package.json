@@ -10,7 +10,8 @@
   ],
   "scripts": {
     "build": "gulp build",
-    "test": "babel-node tests/test.js"
+    "test": "babel-node tests/test.js",
+    "lint": "eslint src"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
     "babel": "^4.7.1",
     "babel-eslint": "^1.0.13",
     "del": "^1.1.1",
+    "eslint": "^0.16.1",
     "gulp": "^3.8.11",
     "gulp-babel": "^4.0.0"
   }

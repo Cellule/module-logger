@@ -1,7 +1,6 @@
 "use strict";
 
 exports.getNow = getNow;
-
 var printf = require("printf");
 
 var config = require("./config");

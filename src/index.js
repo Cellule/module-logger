@@ -1,4 +1,5 @@
-import * as _ from "lodash"
+var _ = require("lodash");
+
 import * as manager from "./manager"
 import * as config from "./config"
 

@@ -8,11 +8,8 @@ var _classCallCheck = function (instance, Constructor) { if (!(instance instance
 exports.getLogger = getLogger;
 exports.setLevelAll = setLevelAll;
 exports.getAvailableLevels = getAvailableLevels;
-
 var _ = require("lodash");
-
 var pkginfo = require("pkginfo-json5");
-
 var winston = require("winston");
 
 var getNow = require("./utils").getNow;
@@ -21,6 +18,7 @@ var config = require("./config");
 
 var defaultLevel = config.isDev ? "verbose" : "info";
 var loggers = {};
+var defaultLoggerName = "__default__";
 var unknownCount = 0;
 
 // We are forcing winston to handle unhandled exceptions, therefore it is
@@ -34,7 +32,6 @@ function proxyMethod(proxyClass, implementationProperty, methodName) {
     implementation[methodName].apply(implementation, arguments);
   };
 }
-
 // Remove default (basic) console logger.
 winston.remove(winston.transports.Console);
 
@@ -75,27 +72,32 @@ var LoggerProxy = (function () {
 
 // Redirect the "log" call and the basic logging levels.
 _(winston.config.npm.levels).keys().concat(["log"]).forEach(_.partial(proxyMethod, LoggerProxy, "logger"));
+
+// Default values
+loggers[defaultLoggerName] = new LoggerProxy();
 function getLogger(module) {
   // Label value for the module.
   var name;
   if (!module) {
-    if (!loggers.__default__) {
-      loggers.__default__ = new LoggerProxy();
-    }
-    return loggers.__default__;
+    return loggers[defaultLoggerName];
   } else if (typeof module === "string") {
     // If a string, assume it is directly the label.
     name = module;
   } else if (module) {
     // Otherwise, try the role field from the package.json(5) and then
     // the name as a last resort.
-    var packageInfo = pkginfo(module, "name", "role");
-    if (packageInfo.role) {
-      name = packageInfo.role;
-    } else if (packageInfo.name) {
-      name = packageInfo.name;
-    } else {
-      name = "unknown-" + ++unknownCount;
+    var packageInfo;
+    try {
+      packageInfo = pkginfo(module, "name", "role");
+      if (packageInfo.role) {
+        name = packageInfo.role;
+      } else if (packageInfo.name) {
+        name = packageInfo.name;
+      } else {
+        return loggers[defaultLoggerName];
+      }
+    } catch (e) {
+      return loggers[defaultLoggerName];
     }
   }
   // Verify if a logger is already cached for that name.

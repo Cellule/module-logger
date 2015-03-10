@@ -1,4 +1,4 @@
-import * as printf from "printf"
+var printf = require("printf");
 import * as config from "./config"
 
 function localISOString(d) {
