@@ -1,3 +1,4 @@
+require("babel/register");
 var gulp = require("gulp");
 var babel = require("gulp-babel");
 var del = require("del");
@@ -34,14 +35,7 @@ gulp.task("postpublish", function(cb) {
 })
 
 // Testing tasks
-var convertedTestsFolder = "__build_tests__";
-gulp.task("cleanTests", function(cb) {
-  del([convertedTestsFolder], cb);
-});
-
-gulp.task("test", ["build", "cleanTests"], function() {
+gulp.task("test", ["build"], function() {
   return gulp.src("tests/**/*.js")
-    .pipe(convert6to5())
-    .pipe(gulp.dest(convertedTestsFolder))
     .pipe(jasmine());
 });
